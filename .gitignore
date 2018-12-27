@@ -1,0 +1,9 @@
+__pycache__/
+params/
+datasets/__pycache__/
+wavernn/__pycache__/feeder.cpython-36.pyc
+wavernn/__pycache__/train.cpython-36.pyc
+wavernn/models/__pycache__/WaveRNNCell.cpython-36.pyc
+wavernn/models/__pycache__/mixture.cpython-36.pyc
+
+
