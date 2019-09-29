@@ -1,18 +1,42 @@
 import librosa
 import librosa.filters
-import numpy as np 
+import numpy as np
 from scipy import signal
-import tensorflow as tf 
+import tensorflow as tf
 from scipy.io import wavfile
+
+
+power_2_15 = 32768
+
+def encode_16bits(x):
+  return np.clip(x * power_2_15, -power_2_15, power_2_15 - 1).astype(np.int16)
+
+
+def dual_channels_quantize(x):
+  """Mu-Law companding + quantize
+  """
+  encoded = encode_16bits(x)
+  unsigned = encoded + power_2_15
+  coarse = unsigned // 256
+  fine = unsigned % 256
+  return coarse, fine
+
+
+def combine_signal(coarse, fine):
+  signal = coarse * 256 + fine
+  signal = signal * 2.0 / 65536 - 1.0
+  return signal.astype(np.float32)
 
 
 def load_wav(path, sr):
     return librosa.core.load(path, sr=sr)[0]
 
+
 def save_wav(wav, path, sr):
-    wav *= 32767 / max(0.01, np.max(np.abs(wav))) 
+    wav *= 32767 / max(0.01, np.max(np.abs(wav)))
     #proposed by @dsmiller
     wavfile.write(path, sr, wav.astype(np.int16))
+
 
 #From https://github.com/r9y9/wavenet_vocoder/blob/master/audio.py
 def start_and_end_indices(quantized, silence_threshold=2):
@@ -75,7 +99,6 @@ def inv_linear_spectrogram(linear_spectrogram, hparams):
         return y
     else:
         return _griffin_lim(S ** hparams.power, hparams)
-    
 
 def inv_mel_spectrogram(mel_spectrogram, hparams):
     '''Converts mel spectrogram to waveform using librosa'''

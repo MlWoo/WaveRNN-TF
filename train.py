@@ -24,11 +24,11 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_input_dir', default='')
     parser.add_argument('--base_output_dir', default='/home/lynn/workspace/wumenglin/WaveRNN')
-    parser.add_argument('--wavernn_input', default='training_data_dual_channels/train.txt')
+    parser.add_argument('--wavernn_input', default='mandarin_24k/train.txt')
     parser.add_argument('--hparams', default='',
                         help='Hyperparameter overrides as a comma-separated list of name=value pairs')
     parser.add_argument('--name', help='Name of logging directory.')
-    parser.add_argument('--input_dir', default='training_data_dual_channels/',
+    parser.add_argument('--input_dir', default='mandarin_24k/',
                         help='folder to contain inputs sentences/targets')
     parser.add_argument('--output_dir', default='output/', help='folder to contain synthesized mel spectrograms')
     parser.add_argument('--model', default='WaveRNN')
