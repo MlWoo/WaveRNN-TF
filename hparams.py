@@ -30,7 +30,7 @@ hparams = tf.contrib.training.HParams(
   gin_channels = -1, #Set this to -1 to disable global conditioning, Only used for multi speaker dataset
 
   max_time_sec = None,
-  max_time_steps = 8000, #Max time steps in audio used to train wavernn (decrease to save memory)
+  max_time_steps = 1500, #Max time steps in audio used to train wavernn (decrease to save memory)
   swap_with_cpu = False,
 
   encoder_conditional_features = True,
@@ -71,7 +71,7 @@ hparams = tf.contrib.training.HParams(
   max_abs_value=4.,  # max absolute value of data. If symmetric, data will be [-max, max] else [0, max]
   loss_mask = False,
 
-  wavernn_batch_size=2,  # batch size used to train wavernn.
+  wavernn_batch_size=32,  # batch size used to train wavernn.
   wavernn_test_size=0.0441,  # % of data to keep as test data, if None, wavernn_test_batches must be not None
   wavernn_test_batches=None,  # number of test batches.
 

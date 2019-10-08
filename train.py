@@ -23,7 +23,7 @@ def prepare_run(args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_input_dir', default='')
-    parser.add_argument('--base_output_dir', default='/home/lynn/workspace/wumenglin/WaveRNN')
+    parser.add_argument('--base_output_dir', default='./')
     parser.add_argument('--wavernn_input', default='mandarin_24k/train.txt')
     parser.add_argument('--hparams', default='',
                         help='Hyperparameter overrides as a comma-separated list of name=value pairs')

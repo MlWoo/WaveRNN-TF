@@ -234,13 +234,13 @@ class WaveGRU:
     self._units_in = hparams.num_units
     self._units_out = hparams.num_channels
 
-
     self._affine_relu_h = Affine(units_in=self._units_in // 2, units_out=self._units_out, activation=tf.nn.relu,
                                  name="Relu-1_C")
     self._affine_h = Affine(units_in=self._units_out, units_out=self._units_out, activation=None, name="Output_C")
     self._affine_relu_l = Affine(units_in=self._units_in // 2, units_out=self._units_out, activation=tf.nn.relu,
                                  name="Relu-1_F")
     self._affine_l = Affine(units_in=self._units_out, units_out=self._units_out, activation=None, name="Output_F")
+    self.hparams = hparams
 
   def __call__(self, inputs, input_lengths):
     with tf.variable_scope(self.name):
