@@ -147,7 +147,7 @@ class WaveRNN:
       inputs_gru = tf.concat([inputs_h_c, inputs_prev, enc_output_c], axis=-1) # B x T(t-1) x C(3+256)
       gru_output_h, gru_output_l = self.gru_cell(inputs_gru, input_lengths=input_lengths-1)
 
-    self.inputs = inputs
+      self.inputs = inputs[:, 1:, :]
 
     self._is_training = is_training
     self._is_evaluating = not self._is_training and not is_synthesis
@@ -155,7 +155,15 @@ class WaveRNN:
     self.output_coarse = gru_output_h
     self.output_fine = gru_output_l
 
-    self.inputs = inputs
+    if self._is_evaluating or self._is_training:
+      output_0_h = gru_output_h[0]
+      output_0_l = gru_output_l[0]
+      sample_0_h = tf.multinomial(output_0_h, 1, name='multinomial')
+      sample_0_l = tf.multinomial(output_0_l, 1, name='multinomial')
+
+      self.sample_output_coarse = sample_0_h
+      self.sample_output_fine = sample_0_l
+
     self.input_lengths = input_lengths - 1
     log('Initialized WaveRNN model. Dimensions (? = dynamic shape): ')
     log('  Train mode:               {}'.format(self._is_training))

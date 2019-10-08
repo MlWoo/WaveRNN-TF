@@ -9,7 +9,6 @@ from time import sleep
 
 log = infolog.log
 
-
 def prepare_run(args):
     modified_hp = hparams.parse(args.hparams)
     os.environ['TF_CPP_MIN_LOG_LEVEL'] = str(args.tf_log_level)
@@ -23,7 +22,7 @@ def prepare_run(args):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_input_dir', default='')
-    parser.add_argument('--base_output_dir', default='/home/lynn/workspace/wumenglin/WaveRNN')
+    parser.add_argument('--base_output_dir', default='./')
     parser.add_argument('--wavernn_input', default='mandarin_24k/train.txt')
     parser.add_argument('--hparams', default='',
                         help='Hyperparameter overrides as a comma-separated list of name=value pairs')
@@ -37,9 +36,9 @@ def main():
     parser.add_argument('--restore', type=bool, default=True, help='Set this to False to do a fresh training')
     parser.add_argument('--summary_interval', type=int, default=250,
         help='Steps between running summary ops')
-    parser.add_argument('--checkpoint_interval', type=int, default=500,
+    parser.add_argument('--checkpoint_interval', type=int, default=10000,
         help='Steps between writing checkpoints')
-    parser.add_argument('--eval_interval', type=int, default=3000,
+    parser.add_argument('--eval_interval', type=int, default=10000,
         help='Steps between eval on test data')
     parser.add_argument('--wavernn_train_steps', type=int, default=360000, help='total number of wavenet training steps')
     parser.add_argument('--tf_log_level', type=int, default=1, help='Tensorflow C++ log level.')

@@ -69,8 +69,6 @@ def eval_step(sess, global_step, model, plot_dir, audio_dir, summary_writer, hpa
 
   target_coarse, target_fine = np.split(target_combine, 2, axis=2)
   target = combine_signal(target_coarse, target_fine)
-  #import pdb
-  #pdb.set_trace()
   target = np.squeeze(target)
   output = combine_signal(output_coarse, output_fine)
   output = np.squeeze(output)
@@ -98,7 +96,6 @@ def eval_step(sess, global_step, model, plot_dir, audio_dir, summary_writer, hpa
 def save_log(sess, global_step, model, plot_dir, audio_dir, hparams):
   log('\nSaving intermediate states at step {}'.format(global_step))
   idx = 0
-  #output, target, length = sess.run([model.output[idx], model.target[idx], model.input_lengths[idx]])
   output_coarse, output_fine, target_combine, length = sess.run([model.sample_output_coarse, model.sample_output_fine,
                                                                  model.inputs[idx], model.input_lengths[idx]])
 

@@ -231,13 +231,14 @@ class Feeder:
       self._assert_ready_for_upsample(x, c)
       if max_time_steps is not None:
         max_steps = _ensure_divisible(max_time_steps, audio.get_hop_size(self._hparams), True)
+        real_max_steps = max_time_steps + 2 * self._hparams.padding * audio.get_hop_size(self._hparams)
         if len(x) > max_time_steps:
           max_time_frames = max_steps // audio.get_hop_size(self._hparams)
-          start = np.random.randint(0, len(c) - max_time_frames)
+          start = np.random.randint(self._hparams.padding, len(c) - max_time_frames - self._hparams.padding)
           time_start = start * audio.get_hop_size(self._hparams)
           x = x[time_start: time_start + max_time_frames * audio.get_hop_size(self._hparams)]
-          c = c[start: start + max_time_frames, :]
-          self._assert_ready_for_upsample(x, c)
+          c = c[start - self._hparams.padding: start + max_time_frames + self._hparams.padding , :]
+          self._assert_ready_for_upsample2(x, c, self._hparams.padding)
         elif len(x) < max_time_steps:
           print("warning: the audio input will be padding")
 
@@ -248,9 +249,12 @@ class Feeder:
     assert len(x) % len(c) == 0
     assert len(x) // len(c) == audio.get_hop_size(self._hparams)
 
+  def _assert_ready_for_upsample2(self, x, c, padding):
+    assert len(x) % (len(c) - 2 * padding) == 0
+    assert len(x) // (len(c) - 2 * padding) == audio.get_hop_size(self._hparams)
 
 def _pad_local_cond(x, maxlen):
-  return np.pad(x, [(12, maxlen - len(x)+12), (0, 0)], mode='constant', constant_values=_pad)
+  return np.pad(x, [(0, maxlen - len(x)), (0, 0)], mode='constant', constant_values=_pad)
 
 
 def _pad_quant_inputs(x, maxlen):
